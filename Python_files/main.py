@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from functionality import *
 
 class project_GUI(tk.Tk):
 
@@ -29,6 +30,7 @@ class project_GUI(tk.Tk):
         list_btn = []
 
         #combo boxes
+        #TODO: get value of comboboxes (might be put retrieved in functionality.py)
         combo_traffic = ttk.Combobox(
             master = frame_buttons,
             font = "36",
@@ -59,6 +61,7 @@ class project_GUI(tk.Tk):
             list_btn.append(proj_button(
                 text = i,
                 master = frame_buttons,
+                command = lambda i = i: button_click(i),
             ))
 
         #status display
@@ -69,6 +72,7 @@ class project_GUI(tk.Tk):
             bg = "grey",
         )
 
+        #TODO: update status display depending on success/failure
         label_status_display = tk.Label(
             master = label_status,
             width = 20,
@@ -86,6 +90,7 @@ class project_GUI(tk.Tk):
             list_btn[i].grid(row = i, padx = 5, pady = 5)
 
         #items to be added to frame_display
+        #TODO: update display after pressing button
         display = tk.Label(
             text = "Output will go here",
             master = frame_display,
