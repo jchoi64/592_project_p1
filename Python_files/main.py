@@ -9,8 +9,8 @@ class project_GUI():
         #frames
         frame_buttons = tk.Frame(
             master = window,
-            width = 300,
-            height = 1500,
+            # width = 300,
+            # height = 1500,
             bg = "grey",
         )
         frame_buttons.grid(row = 1, column = 1)
@@ -54,9 +54,21 @@ class project_GUI():
             ))
 
         #status display
-        label_status = tk.LabelFrame(
-            master = frame_buttons
+        label_status = tk.Label(
+            master = frame_buttons,
+            text = "Status:",
+            bg = "grey"
         )
+        list_btn.append(label_status)
+
+        label_status_display = tk.Label(
+            master = frame_buttons,
+            text = "To be updated",
+            bg = "light green"
+        )
+        list_btn.append(label_status_display)
+
+
 
         for i in range(len(list_btn)):
             list_btn[i].grid(row = i, padx = 5, pady = 5)
@@ -77,9 +89,9 @@ class proj_button(tk.Button):
 
     def __init__(self, *args, **kwargs):
         tk.Button.__init__(self, *args, **kwargs)
-        self['width'] = 25
-        self['height'] = 3
-        self['font'] = "20"
+        self['width'] = 15
+        self['height'] = 2
+        self['font'] = "36"
         self['bg'] = "#d3d3d3"
         self['fg'] = "black"
 
