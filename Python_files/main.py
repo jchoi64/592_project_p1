@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 
 class project_GUI():
+
     def __init__(self,window):
+        #window properties
         window.title("592 Project")
         window.geometry("1500x750")
 
@@ -24,9 +26,10 @@ class project_GUI():
         #items to be added to frame_buttons
         list_btn = []
 
-        #combo box
+        #combo boxes
         combo_traffic = ttk.Combobox(
             master = frame_buttons,
+            font = "36",
             values = [
                 "Accidents",
                 "Traffic volume"
@@ -37,6 +40,7 @@ class project_GUI():
 
         combo_years = ttk.Combobox(
             master = frame_buttons,
+            font = "36",
             values = [
                 "2016",
                 "2017",
@@ -53,23 +57,27 @@ class project_GUI():
         for i in list_btn_strings:
             list_btn.append(proj_button(
                 text = i,
-                master = frame_buttons
+                master = frame_buttons,
             ))
 
         #status display
-        label_status = tk.Label(
+        label_status = tk.LabelFrame(
             master = frame_buttons,
-            text = "Status:",
-            bg = "grey"
+            text = "Status",
+            font = 20,
+            bg = "grey",
         )
-        list_btn.append(label_status)
 
         label_status_display = tk.Label(
-            master = frame_buttons,
+            master = label_status,
+            width = 20,
+            height = 5,
+            font = 36,
             text = "To be updated",
-            bg = "light green"
+            bg = "light green",
         )
-        list_btn.append(label_status_display)
+        label_status_display.pack(expand = True,fill = "both")
+        list_btn.append(label_status)
 
         #adds list_btn to frame_button grid style
         for i in range(len(list_btn)):
