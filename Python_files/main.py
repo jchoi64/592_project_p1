@@ -1,23 +1,25 @@
 import tkinter as tk
 from tkinter import ttk
 
-class project_GUI():
+class project_GUI(tk.Tk):
 
-    def __init__(self,window):
+    def __init__(self,*args, **kwargs):
+        tk.Tk.__init__(self,*args, **kwargs)
+
         #window properties
-        window.title("592 Project")
-        window.geometry("1500x750")
+        self.title("592 Project")
+        self.geometry("1500x750")
 
         #frames
         frame_buttons = tk.Frame(
-            master = window,
+            master = self,
             height = 750,
             width = 300,
             bg = "grey",
         )
 
         frame_display = tk.Frame(
-            master = window,
+            master = self,
             height = 750,
             width = 1200,
             bg = "green",
@@ -49,7 +51,6 @@ class project_GUI():
         )
         combo_years.current(0)
         list_btn.append(combo_years)
-
 
         #buttons
         list_btn_strings = ["Read","Sort","Analysis","Map"]
@@ -98,7 +99,8 @@ class project_GUI():
         frame_buttons.pack(expand = True,fill = "y",side = "left")
         frame_display.pack(expand = True,fill = "both",side = "right")
         
-        window.mainloop()
+    def run_GUI(self):
+        self.mainloop()
 
 class proj_button(tk.Button):
 
@@ -110,5 +112,5 @@ class proj_button(tk.Button):
         self['bg'] = "#d3d3d3"
         self['fg'] = "black"
 
-window = tk.Tk()
-gui_start = project_GUI(window)
+gui = project_GUI()
+gui.run_GUI()
