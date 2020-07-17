@@ -13,12 +13,13 @@ class project_GUI():
             # height = 1500,
             bg = "grey",
         )
-        frame_buttons.grid(row = 1, column = 1)
+        frame_buttons.grid(row = 0, column = 0)
+        window.rowconfigure(0, weight = 1, minsize = 50)
 
         frame_display = tk.Frame(
             master = window
         )
-        frame_display.grid(row = 1, column = 2, padx = 5, pady = 5)
+        frame_display.grid(row = 0, column = 1, padx = 5, pady = 5)
 
         #items to be added to frame_buttons
         list_btn = []
@@ -31,6 +32,7 @@ class project_GUI():
                 "Traffic volume"
             ]
         )
+        combo_traffic.current(0)
         list_btn.append(combo_traffic)
 
         combo_years = ttk.Combobox(
@@ -41,6 +43,7 @@ class project_GUI():
                 "2018"
             ]
         )
+        combo_years.current(0)
         list_btn.append(combo_years)
 
 
@@ -71,7 +74,8 @@ class project_GUI():
 
 
         for i in range(len(list_btn)):
-            list_btn[i].grid(row = i, padx = 5, pady = 5)
+            frame_buttons.rowconfigure(i, weight = 1, minsize = 50)
+            list_btn[i].grid(row = i, padx = 5, pady = 15)
 
         #items to be added to frame_display
         display = tk.Label(
