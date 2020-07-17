@@ -4,21 +4,21 @@ from tkinter import ttk
 class project_GUI():
     def __init__(self,window):
         window.title("592 Project")
-        window.geometry("500x500")
+        window.geometry("1500x750")
 
         #frames
         frame_buttons = tk.Frame(
             master = window,
-            # width = 30,
-            # height = 500,
-            bg = "yellow",
-            borderwidth = 15
+            width = 300,
+            height = 1500,
+            bg = "grey",
         )
-        # frame_buttons.grid(row = 1, column = 1, padx = 5, pady = 5)
+        frame_buttons.grid(row = 1, column = 1)
+
         frame_display = tk.Frame(
             master = window
         )
-        # frame_display.grid(row = 1, column = 2, padx = 5, pady = 5)
+        frame_display.grid(row = 1, column = 2, padx = 5, pady = 5)
 
         #items to be added to frame_buttons
         list_btn = []
@@ -53,10 +53,13 @@ class project_GUI():
                 master = frame_buttons
             ))
 
-        #status display    
+        #status display
+        label_status = tk.LabelFrame(
+            master = frame_buttons
+        )
 
-        for i in list_btn:
-            i.pack()
+        for i in range(len(list_btn)):
+            list_btn[i].grid(row = i, padx = 5, pady = 5)
 
         #items to be added to frame_display
         display = tk.Label(
@@ -65,8 +68,8 @@ class project_GUI():
             )
         display.pack()
 
-        frame_display.pack(side = tk.RIGHT)
-        frame_buttons.pack(side = tk.LEFT)
+        # frame_display.pack(side = tk.RIGHT)
+        # frame_buttons.pack(side = tk.LEFT)
         
         window.mainloop()
 
@@ -76,7 +79,8 @@ class proj_button(tk.Button):
         tk.Button.__init__(self, *args, **kwargs)
         self['width'] = 25
         self['height'] = 3
-        self['bg'] = "grey"
+        self['font'] = "20"
+        self['bg'] = "#d3d3d3"
         self['fg'] = "black"
 
 window = tk.Tk()
