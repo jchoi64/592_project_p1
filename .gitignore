@@ -1,2 +1,6 @@
 #ignore pycache
 Python_files/__pycache__
+Python_files/database/__pycache__
+
+#ignore connection string
+Python_files/database/mongodb_userinfo.py
