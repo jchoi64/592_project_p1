@@ -9,17 +9,17 @@ class project_GUI():
         #frames
         frame_buttons = tk.Frame(
             master = window,
-            # width = 300,
-            # height = 1500,
+            height = 750,
+            width = 300,
             bg = "grey",
         )
-        frame_buttons.grid(row = 0, column = 0)
-        window.rowconfigure(0, weight = 1, minsize = 50)
 
         frame_display = tk.Frame(
-            master = window
+            master = window,
+            height = 750,
+            width = 1200,
+            bg = "green",
         )
-        frame_display.grid(row = 0, column = 1, padx = 5, pady = 5)
 
         #items to be added to frame_buttons
         list_btn = []
@@ -71,21 +71,24 @@ class project_GUI():
         )
         list_btn.append(label_status_display)
 
-
-
+        #adds list_btn to frame_button grid style
         for i in range(len(list_btn)):
             frame_buttons.rowconfigure(i, weight = 1, minsize = 50)
-            list_btn[i].grid(row = i, padx = 5, pady = 15)
+            list_btn[i].grid(row = i, padx = 5, pady = 5)
 
         #items to be added to frame_display
         display = tk.Label(
             text = "Output will go here",
-            master = frame_display
+            master = frame_display,
+            height = 750,
+            width = 1200,
+            # bg = "green",
             )
-        display.pack()
+        display.pack(expand = True,fill = "both")
 
-        # frame_display.pack(side = tk.RIGHT)
-        # frame_buttons.pack(side = tk.LEFT)
+        #packs frames left to right and fits the size of the window
+        frame_buttons.pack(expand = True,fill = "y",side = "left")
+        frame_display.pack(expand = True,fill = "both",side = "right")
         
         window.mainloop()
 
