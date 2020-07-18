@@ -23,19 +23,16 @@ class project_GUI(tk.Tk):
             master = self,
             height = 750,
             width = 1200,
-            bg = "green",
         )
 
         #items to be added to frame_display
-        #TODO: update display after pressing button
-        display = tk.Label(
-            text = "Output will go here",
-            master = frame_display,
-            height = 750,
-            width = 1200,
-            # bg = "green",
-            )
-        display.pack(expand = True,fill = "both")
+        # display = tk.Label(
+        #     text = "Output will go here",
+        #     master = frame_display,
+        #     height = 750,
+        #     width = 1200,
+        #     )
+        #display.pack(expand = True,fill = "both")
 
         #items to be added to frame_buttons
         list_btn = []
@@ -84,6 +81,8 @@ class project_GUI(tk.Tk):
         label_status_display.pack(expand = True,fill = "both")
 
         #buttons
+
+        #TODO: reimplment buttons through for loop
         # list_btn_strings = ["Read","Sort","Analysis","Map"]
 
         # for i in list_btn_strings:
@@ -99,7 +98,7 @@ class project_GUI(tk.Tk):
             command = lambda: btn_read_press(
                 combo_traffic.get(),
                 combo_years.get(),
-                display,
+                frame_display,
                 label_status_display,),
         )
         list_btn.append(btn_read)
@@ -110,7 +109,7 @@ class project_GUI(tk.Tk):
             command = lambda: btn_sort_press(
                 combo_traffic.get(),
                 combo_years.get(),
-                display,
+                frame_display,
                 label_status_display,),
         )
         list_btn.append(btn_sort)
@@ -121,7 +120,7 @@ class project_GUI(tk.Tk):
             command = lambda: btn_analysis_press(
                 combo_traffic.get(),
                 combo_years.get(),
-                display,
+                frame_display,
                 label_status_display),
         )
         list_btn.append(btn_analysis)
@@ -132,7 +131,7 @@ class project_GUI(tk.Tk):
             command = lambda: btn_map_press(
                 combo_traffic.get(),
                 combo_years.get(),
-                display,
+                frame_display,
                 label_status_display),
         )
         list_btn.append(btn_map)
@@ -145,7 +144,7 @@ class project_GUI(tk.Tk):
             list_btn[i].grid(row = i, padx = 5, pady = 5)
 
         #packs frames left to right and fits the size of the window
-        frame_buttons.pack(expand = True,fill = "y",side = "left")
+        frame_buttons.pack(expand = False,fill = "y",side = "left")
         frame_display.pack(expand = True,fill = "both",side = "right")
 
     def run_GUI(self):
