@@ -26,6 +26,17 @@ class project_GUI(tk.Tk):
             bg = "green",
         )
 
+        #items to be added to frame_display
+        #TODO: update display after pressing button
+        display = tk.Label(
+            text = "Output will go here",
+            master = frame_display,
+            height = 750,
+            width = 1200,
+            # bg = "green",
+            )
+        display.pack(expand = True,fill = "both")
+
         #items to be added to frame_buttons
         list_btn = []
 
@@ -53,44 +64,6 @@ class project_GUI(tk.Tk):
         combo_years.current(0)
         list_btn.append(combo_years)
 
-        #buttons
-        # list_btn_strings = ["Read","Sort","Analysis","Map"]
-
-        # for i in list_btn_strings:
-        #     list_btn.append(proj_button(
-        #         text = i,
-        #         master = frame_buttons,
-        #         command = lambda i = i: button_click(i),
-        #     ))
-
-        btn_read = proj_button(
-            text = "Read",
-            master = frame_buttons,
-            command = lambda: btn_read_press(combo_traffic.get(),combo_years.get()),
-        )
-        list_btn.append(btn_read)
-
-        btn_sort = proj_button(
-            text = "Sort",
-            master = frame_buttons,
-            command = lambda: btn_sort_press(combo_traffic.get(),combo_years.get()),
-        )
-        list_btn.append(btn_sort)
-
-        btn_analysis = proj_button(
-            text = "Analysis",
-            master = frame_buttons,
-            command = lambda: btn_analysis_press(combo_traffic.get(),combo_years.get()),
-        )
-        list_btn.append(btn_analysis)
-
-        btn_map = proj_button(
-            text = "Map",
-            master = frame_buttons,
-            command = lambda: btn_map_press(combo_traffic.get(),combo_years.get()),
-        )
-        list_btn.append(btn_map)
-
         #status display
         label_status = tk.LabelFrame(
             master = frame_buttons,
@@ -109,23 +82,67 @@ class project_GUI(tk.Tk):
             bg = "light green",
         )
         label_status_display.pack(expand = True,fill = "both")
+
+        #buttons
+        # list_btn_strings = ["Read","Sort","Analysis","Map"]
+
+        # for i in list_btn_strings:
+        #     list_btn.append(proj_button(
+        #         text = i,
+        #         master = frame_buttons,
+        #         command = lambda i = i: button_click(i),
+        #     ))
+
+        btn_read = proj_button(
+            text = "Read",
+            master = frame_buttons,
+            command = lambda: btn_read_press(
+                combo_traffic.get(),
+                combo_years.get(),
+                display,
+                label_status_display,),
+        )
+        list_btn.append(btn_read)
+
+        btn_sort = proj_button(
+            text = "Sort",
+            master = frame_buttons,
+            command = lambda: btn_sort_press(
+                combo_traffic.get(),
+                combo_years.get(),
+                display,
+                label_status_display,),
+        )
+        list_btn.append(btn_sort)
+
+        btn_analysis = proj_button(
+            text = "Analysis",
+            master = frame_buttons,
+            command = lambda: btn_analysis_press(
+                combo_traffic.get(),
+                combo_years.get(),
+                display,
+                label_status_display),
+        )
+        list_btn.append(btn_analysis)
+
+        btn_map = proj_button(
+            text = "Map",
+            master = frame_buttons,
+            command = lambda: btn_map_press(
+                combo_traffic.get(),
+                combo_years.get(),
+                display,
+                label_status_display),
+        )
+        list_btn.append(btn_map)
+
         list_btn.append(label_status)
 
         #adds list_btn to frame_button grid style
         for i in range(len(list_btn)):
             frame_buttons.rowconfigure(i, weight = 1, minsize = 50)
             list_btn[i].grid(row = i, padx = 5, pady = 5)
-
-        #items to be added to frame_display
-        #TODO: update display after pressing button
-        display = tk.Label(
-            text = "Output will go here",
-            master = frame_display,
-            height = 750,
-            width = 1200,
-            # bg = "green",
-            )
-        display.pack(expand = True,fill = "both")
 
         #packs frames left to right and fits the size of the window
         frame_buttons.pack(expand = True,fill = "y",side = "left")
