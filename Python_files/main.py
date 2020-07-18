@@ -30,7 +30,6 @@ class project_GUI(tk.Tk):
         list_btn = []
 
         #combo boxes
-        #TODO: get value of comboboxes (might be put retrieved in functionality.py)
         combo_traffic = ttk.Combobox(
             master = frame_buttons,
             font = "36",
@@ -55,14 +54,42 @@ class project_GUI(tk.Tk):
         list_btn.append(combo_years)
 
         #buttons
-        list_btn_strings = ["Read","Sort","Analysis","Map"]
+        # list_btn_strings = ["Read","Sort","Analysis","Map"]
 
-        for i in list_btn_strings:
-            list_btn.append(proj_button(
-                text = i,
-                master = frame_buttons,
-                command = lambda i = i: button_click(i),
-            ))
+        # for i in list_btn_strings:
+        #     list_btn.append(proj_button(
+        #         text = i,
+        #         master = frame_buttons,
+        #         command = lambda i = i: button_click(i),
+        #     ))
+
+        btn_read = proj_button(
+            text = "Read",
+            master = frame_buttons,
+            command = lambda: btn_read_press(combo_traffic.get(),combo_years.get()),
+        )
+        list_btn.append(btn_read)
+
+        btn_sort = proj_button(
+            text = "Sort",
+            master = frame_buttons,
+            command = lambda: btn_sort_press(combo_traffic.get(),combo_years.get()),
+        )
+        list_btn.append(btn_sort)
+
+        btn_analysis = proj_button(
+            text = "Analysis",
+            master = frame_buttons,
+            command = lambda: btn_analysis_press(combo_traffic.get(),combo_years.get()),
+        )
+        list_btn.append(btn_analysis)
+
+        btn_map = proj_button(
+            text = "Map",
+            master = frame_buttons,
+            command = lambda: btn_map_press(combo_traffic.get(),combo_years.get()),
+        )
+        list_btn.append(btn_map)
 
         #status display
         label_status = tk.LabelFrame(
@@ -103,7 +130,7 @@ class project_GUI(tk.Tk):
         #packs frames left to right and fits the size of the window
         frame_buttons.pack(expand = True,fill = "y",side = "left")
         frame_display.pack(expand = True,fill = "both",side = "right")
-        
+
     def run_GUI(self):
         self.mainloop()
 
@@ -116,6 +143,8 @@ class proj_button(tk.Button):
         self['font'] = "36"
         self['bg'] = "#d3d3d3"
         self['fg'] = "black"
+
+#TODO: add other classes for other elements in the GUI
 
 gui = project_GUI()
 gui.run_GUI()

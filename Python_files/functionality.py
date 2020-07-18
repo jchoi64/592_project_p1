@@ -1,33 +1,87 @@
-def button_click(button_name):
-    if button_name == "Read":
-        read_button()
-        print("Read button clicked")
-
-    if button_name == "Sort":
-        sort_button()
-        print("Sort button clicked")
-    
-    if button_name == "Analysis":
-        analysis_button()
-        print("Analysis button clicked")
-        
-    if button_name == "Map":
-        map_button
-        print("Map button clicked")
-
-def read_button():
+def btn_read_press(traffic,year):
     #TODO: add functionality to read_button
-    pass
+    if traffic == "Accidents":
+        if year == "2016":
+            pass
 
-def sort_button():
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+    if traffic == "Traffic volume":
+        if year == "2016":
+            pass
+
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+def btn_sort_press(traffic,year):
     #TODO: add functionality to sort_button
-    pass
+    if traffic == "Accidents":
+        if year == "2016":
+            pass
 
-def analysis_button():
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+    if traffic == "Traffic volume":
+        if year == "2016":
+            pass
+
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+def btn_analysis_press(traffic,year):
     #TODO: add functionality to analysis_button
-    pass
+    if traffic == "Accidents":
+        if year == "2016":
+            pass
 
-def map_button():
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+    if traffic == "Traffic volume":
+        if year == "2016":
+            pass
+
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+def btn_map_press(traffic,year):
     #TODO: add functionality to map_button
-    pass
-        
+    if traffic == "Accidents":
+        if year == "2016":
+            pass
+
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
+
+    if traffic == "Traffic volume":
+        if year == "2016":
+            pass
+
+        if year == "2017":
+            pass
+
+        if year == "2018":
+            pass
