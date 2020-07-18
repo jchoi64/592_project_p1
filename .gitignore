@@ -4,3 +4,4 @@ Python_files/database/__pycache__
 
 #ignore connection string
 Python_files/database/mongodb_userinfo.py
+Python_files/mongodb_userinfo.py
