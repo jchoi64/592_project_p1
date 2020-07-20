@@ -20,74 +20,149 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from matplotlib import style
 
+from operator import itemgetter
+
 #import connection string, hidden from git for security reasons
 import mongodb_userinfo
 
 cluster = MongoClient(mongodb_userinfo.connection_string())
 db = cluster["592_Project_1"]
 
+# this function handles operations when the read button is clicked
 def btn_read_press(traffic,year,frame_display,label_status_display):
     try:
-        #update Status
+        # update Status
         label_status_display.config(bg="#00FF00", text= "Successfully read from DB")
+        
+        # if user selects 'Accidents'
         if traffic == "Accidents":
+            # if user selects year '2016'
             if year == "2016":
+                # invoke results_list function which exports the collection (2016 incidents) from mongodb
+                # assign the list to 'results'
                 results = results_list("Traffic_Incidents_Archive_2016")
+                # print the table in GUI
                 print_table(results,frame_display)
 
+            # if user selects year '2017'
             if year == "2017":
+                # invoke results_list function which exports the collection (2017 incidents) from mongodb
                 results = results_list("Traffic_Incidents_Archive_2017")
+                # print the table in GUI
                 print_table(results,frame_display)
 
+            # if user selects year '2018'
             if year == "2018":
+                # unlike year 2016 and 2017, there is no separate file for just the year of 2018
+                # results_list_2018 function extracts 2018 incidents from the 'Traffic_Incidents' collection
+                # invoke results_list_2018 function which exports collection from mongodb and extracts 2018 data
                 results = results_list_2018("Traffic_Incidents")
+                # print the table in GUI
                 print_table(results,frame_display)
 
+        # if user selects 'Volume'
         if traffic == "Traffic volume":
+            # if user selects year '2016'
             if year == "2016":
+                # invoke results_list function which exports the collection (2016 traffic volume) from mongodb
                 results = results_list("TrafficFlow2016_OpenData")
+                # print the table in GUI
                 print_table(results,frame_display)
-
+            
+            # if user selects year '2017'
             if year == "2017":
+                # invoke results_list function which exports the collection (2017 traffic volume) from mongodb
                 results = results_list("2017_Traffic_Volume_Flow")
+                # print the table in GUI
                 print_table(results,frame_display)
-
+            
+            # if user selects year '2018'
             if year == "2018":
+                # invoke results_list function which exports the collection (2018 traffic volume) from mongodb
                 results = results_list("Traffic_Volumes_for_2018")
+                # print the table in GUI
                 print_table(results,frame_display)
+    
     #if error occurs
     except:
+        # display error message in the status window, in this case it would be 'Error Reading from DB'
         label_status_display.config(bg="red", text= "Error Reading from DB")
 
 
+# this function handles operations when the sort button is clicked
 def btn_sort_press(traffic,year,frame_display,label_status_display):
-    #TODO: add functionality to sort_button
     try:
-        #update Status
+        # Update States
         label_status_display.config(bg="#00FF00", text= "Successfully sorted")
+        
+        # if user selects 'Accidents'
         if traffic == "Accidents":
+            # if user selects year '2016'
             if year == "2016":
-
-                pass
-
+                # invoke results_list function which exports the collection (sorted 2016 incidents) from mongodb
+                # assign the list to 'results'
+                results = results_list("Traffic_Incidents_Archive_2016_sorted_freq")
+                # print the table in GUI
+                print_table(results,frame_display)
+            
+            # if user selects year '2017'
             if year == "2017":
-               pass
+                # invoke results_list function which exports the collection (sorted 2017 incidents) from mongodb
+                # assign the list to 'results'
+                results = results_list("Traffic_Incidents_Archive_2017_sorted_freq")
+                # print the table in GUI
+                print_table(results,frame_display)
 
+            # if user selects year '2018'
             if year == "2018":
-                 pass
+                # invoke results_list function which exports the collection (sorted 2018 incidents) from mongodb
+                results = results_list("Traffic_Incidents_Archive_2018_sorted_freq")
+                # print the table in GUI
+                print_table(results,frame_display)
 
+        # if user selects 'Volume'
         if traffic == "Traffic volume":
+            # if user selects year '2016'
             if year == "2016":
-                pass
+                # invoke results_list function which exports the collection (2016 traffic volume) from mongodb
+                # assign the list to 'results'
+                results = results_list("TrafficFlow2016_OpenData")
+                # sort the 'results' list
+                # 'itemgetter' is imported from the 'operator' module
+                # select all the keys associated with volume, then sort the list in descending order of volume
+                results.sort(key = itemgetter('volume'), reverse = True)
+                # print the table in GUI
+                print_table(results,frame_display)
 
+            # if user selects year '2017'
             if year == "2017":
-                pass
-
+                # invoke results_list function which exports the collection (2017 traffic volume) from mongodb
+                # assign the list to 'results'
+                results = results_list("2017_Traffic_Volume_Flow")
+                # sort the 'results' list
+                # 'itemgetter' is imported from the 'operator' module
+                # select all the keys associated with volume, then sort the list in descending order of volume
+                results.sort(key = itemgetter('volume'), reverse = True)
+                # print the table in GUI
+                print_table(results,frame_display)
+            
+            # if user selects year '2018'
             if year == "2018":
-               pass
+                # invoke results_list function which exports the collection (2018 traffic volume) from mongodb
+                # assign the list to 'results'
+                results = results_list("Traffic_Volumes_for_2018")
+                # sort the 'results' list
+                # 'itemgetter' is imported from the 'operator' module
+                # select all the keys associated with volume, then sort the list in descending order of volume
+                results.sort(key = itemgetter('VOLUME'), reverse = True)
+                # print the table in GUI
+                print_table(results,frame_display)
+    
     #if error occurs
     except:
-         label_status_display.config(bg="red", text= "Sort Error")
+        # display error message in the status window, in this case it would be 'sort error'
+        label_status_display.config(bg="red", text= "Sort Error")
+
 
 def btn_analysis_press(traffic,year,frame_display,label_status_display):
     try:
