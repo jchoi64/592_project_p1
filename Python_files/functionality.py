@@ -59,6 +59,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
     except:
         label_status_display.config(bg="red", text= "Error Reading from DB")
 
+
 def btn_sort_press(traffic,year,frame_display,label_status_display):
     #TODO: add functionality to sort_button
     try:
@@ -102,27 +103,41 @@ def btn_analysis_press(traffic,year,frame_display,label_status_display):
     except:
          label_status_display.config(bg="red", text= "Analysis Error")
 
+
 def btn_map_press(traffic,year,frame_display,label_status_display):
-    #accidents needs merging
-    if traffic == "Accidents":
-        if year == "2016":
-            pass
+    try:
+        #update Status
+        label_status_display.config(bg="#00FF00", text= "Successfully written map")
+        if traffic == "Accidents":
+            if year == "2016":
+                print_map(frame_display,"Traffic_Incidents_Archive_2016")
+                pass
 
-        if year == "2017":
-            pass
+            if year == "2017":
+                print_map(frame_display,"Traffic_Incidents_Archive_2017")
+                pass
+            
+            #TODO: fix 2018 html
+            if year == "2018":
+                print_map(frame_display,"Traffic_Incidents_Archive_2018")
+                pass
+        
+        #TODO: currently creates huge html files that basically cant be loaded, needs less markers somehow (some sort of grouping required or instead of markers, heat map?)
+        if traffic == "Traffic volume":
+            if year == "2016":
+                print_map_2(frame_display,"TrafficFlow2016_OpenData")
+                pass
 
-        if year == "2018":
-            pass
-    #needs merging and with my parsing functions
-    if traffic == "Traffic volume":
-        if year == "2016":
-            pass
+            if year == "2017":
+                print_map_2(frame_display,"2017_Traffic_Volume_Flow")
+                pass
 
-        if year == "2017":
-            pass
-
-        if year == "2018":
-            pass
+            if year == "2018":
+                print_map_2(frame_display,"Traffic_Volumes_for_2018", 2018)
+                pass
+    #if error occurs
+    except:
+         label_status_display.config(bg="red", text= "Map Error")
 
 #grid style approach to making a table
 #too slow
@@ -206,7 +221,7 @@ def results_list_2018(collection_name):
 
 #~READ END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#~MAP START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~ANALYSIS START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def print_analysis(frame_display,collection_name):
     
     for items in frame_display.winfo_children():
@@ -310,7 +325,7 @@ def print_analysis2(frame_display,collection_name):
     volSum2017 = 0
     for i in list_vol2017:
         volSum2017 += i
-        
+
     #~~~~~~~~~~~~2018~~~~~~~~~~~~~~~~~
 
     list_vol2018= []
@@ -350,4 +365,154 @@ def print_analysis2(frame_display,collection_name):
     toolbar = NavigationToolbar2Tk(canvas, frame_display)
     toolbar.update()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+#~ANALYSIS END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~MAP START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def print_map(frame_display,collection_name):
+    
+    for items in frame_display.winfo_children():
+        items.destroy()
+    
+    collection = db[collection_name]
+    Lat = list(collection.find({}, {"Latitude":1,"_id":0}))
+    Long = list(collection.find({}, {"Longitude":1,"_id":0}))
+    Count = list(collection.find({}, {"Count":1,"_id":0}))
+    
+    list_lat = []
+    for result in Lat:
+        list_lat.append(result["Latitude"])
+    
+    list_long = []
+    for result in Long:
+        list_long.append(result["Longitude"])  
+    
+    list_count = []
+    for result in Count:
+        list_count.append(result["Count"])
+        
+    df=pd.DataFrame({'Latitude':list_lat,'Longitude' : list_long, 'Count' : list_count})
+    
+    
+    #can I make it start on looking at locaiton of most accidents?
+    map_osm = folium.Map(location=[51.0673798693422,-114.028551292521], tiles='Stamen Toner', zoom_start=13)
+    
+    for index, row in df.iterrows():
+        folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['Count']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
+   
+    map_osm
+    map_osm.save('C:/Users/Jun/Documents/uofc work/ENSF 592/Project/HTML_files/map.html')
+
+   # webbrowser.open(url,new=ne2)
+    
+    #webbrowser.open('file://' + os.path.realpath('map_osm'))
+    
+    """
+    try:
+        from uirllib import pathname2url
+    except:
+        from urllib.request import pathname2url
+        
+    url = format(pathname2url(os.path.abspath('map_osm')))
+    webbrowser.open(url)
+    """
+
+    pass
+
+
+def print_map_2(frame_display,collection_name,year = 2016):
+    
+    for items in frame_display.winfo_children():
+        items.destroy()
+    
+    collection = db[collection_name]
+    
+    #checks if year is 2018
+    if year == 2018:
+        list_long, list_lat, list_volume = database_parse_multicoordinates_2018(collection)
+    #otherwise use 2016/2017 parsing function
+    else:
+        list_long, list_lat, list_volume = database_parse_multicoordinates(collection)
+
+        
+    df=pd.DataFrame({'Latitude':list_lat,'Longitude' : list_long, 'Volume' : list_volume})
+    
+    
+    #can I make it start on looking at locaiton of most accidents?
+    map_osm = folium.Map(location=[51.0673798693422,-114.028551292521], tiles='Stamen Toner', zoom_start=13)
+    
+    for index, row in df.iterrows():
+        folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['Volume']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
+   
+    map_osm
+    map_osm.save('C:/Users/Jun/Documents/uofc work/ENSF 592/Project/HTML_files/map.html')
+
+   # webbrowser.open(url,new=ne2)
+    
+    #webbrowser.open('file://' + os.path.realpath('map_osm'))
+    
+    """
+    try:
+        from uirllib import pathname2url
+    except:
+        from urllib.request import pathname2url
+        
+    url = format(pathname2url(os.path.abspath('map_osm')))
+    webbrowser.open(url)
+    """
+
+    pass
+
+
+#given a MULTILINESTRING s and volume, return list of longs and list of lats with their count/volume
+def parse_multicoordinates(s,volume):
+    s_stripped = s.replace("MULTILINESTRING","").replace("(","").replace(")","").replace(",","")
+    s_split = s_stripped.split()
+
+    list_long = []
+    list_lat = []
+    list_volume = int(len(s_split) /2) *[volume]
+
+    for i in range(len(s_split)):
+        if i % 2 == 0:
+            list_long.append(s_split[i])
+        else:
+            list_lat.append(s_split[i])
+
+    return list_long,list_lat,list_volume
+
+
+#given a database return a list of longs,lats and volumes
+def database_parse_multicoordinates(collection):
+    list_multi_line_string = list(collection.find({},{"the_geom": 1, "_id": 0}))
+    list_volume = list(collection.find({},{"volume": 1, "_id": 0}))
+
+    list_long = []
+    list_lat = []
+    list_volume_extended = []
+
+    for string,volume in zip(list_multi_line_string,list_volume):
+        long,lat,vol = parse_multicoordinates(string["the_geom"],volume["volume"])
+        list_long.extend(long)
+        list_lat.extend(lat)
+        list_volume_extended.extend(vol)
+
+    return list_long,list_lat,list_volume_extended
+
+
+#given a database return a list of longs,lats and volumes for 2018
+def database_parse_multicoordinates_2018(collection):
+    list_multi_line_string = list(collection.find({},{"multilinestring": 1, "_id": 0}))
+    list_volume = list(collection.find({},{"VOLUME": 1, "_id": 0}))
+
+    list_long = []
+    list_lat = []
+    list_volume_extended = []
+
+    for string,volume in zip(list_multi_line_string,list_volume):
+        long,lat,vol = parse_multicoordinates(string["multilinestring"],volume["VOLUME"])
+        list_long.extend(long)
+        list_lat.extend(lat)
+        list_volume_extended.extend(vol)
+        
+    return list_long,list_lat,list_volume_extended
 #~MAP END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
