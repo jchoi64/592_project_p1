@@ -192,9 +192,8 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
                 print_map(frame_display,"Traffic_Incidents_Archive_2017")
                 pass
             
-            #TODO: fix 2018 html
             if year == "2018":
-                print_map(frame_display,"Traffic_Incidents_Archive_2018")
+                print_map(frame_display,"Traffic_Incidents_Archive_2018_sorted_freq")
                 pass
         
         #TODO: currently creates huge html files that basically cant be loaded, needs less markers somehow (some sort of grouping required or instead of markers, heat map?)
@@ -346,12 +345,13 @@ def print_analysis(frame_display,collection_name):
     fig=Figure(figsize = (5,4),dpi=100)
 
     a=fig.add_subplot(1,1,1).plot(df2.Year, df2.y)
-    fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1) 
+    fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1)
+    fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
+    fig.text(0.04, 0.5, 'Total Accidents', va='center', rotation='vertical', size = '14')
+    fig.text(0.5, 0.9, 'Total Accidents per Year', ha='center', size = '24')
    
-
     canvas = FigureCanvasTkAgg(fig, frame_display)
-    #fig.set_xlabel('x')
-    #fig.set_ylabel('y')
+
 
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
@@ -426,7 +426,9 @@ def print_analysis2(frame_display,collection_name):
 
     a=fig.add_subplot(1,1,1).plot(df.Year, df.Volume)
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1) 
-   
+    fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
+    fig.text(0.04, 0.5, 'Total Traffic Volume', va='center', rotation='vertical', size = '14')
+    fig.text(0.5, 0.9, 'Total Traffic Volume per Year', ha='center', size = '24')
 
     canvas = FigureCanvasTkAgg(fig, frame_display)
     #fig.set_xlabel('x')
