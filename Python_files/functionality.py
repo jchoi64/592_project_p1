@@ -19,9 +19,8 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             results = results_list("Traffic_Incidents_Archive_2017")
             print_table(results,frame_display)
 
-        #TODO: 2018 file needs parsing (there is no standalone 2018 file)
         if year == "2018":
-            results = results_list("Traffic_Incidents")
+            results = results_list_2018("Traffic_Incidents")
             print_table(results,frame_display)
 
     if traffic == "Traffic volume":
@@ -38,7 +37,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             print_table(results,frame_display)
 
 def btn_sort_press(traffic,year,frame_display,label_status_display):
-    #TODO: add functionality to sort_button
+    #TODO: accidents needs functionality
     if traffic == "Accidents":
         if year == "2016":
             pass
@@ -48,7 +47,8 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
 
         if year == "2018":
             pass
-
+    
+    #finished, needs merging
     if traffic == "Traffic volume":
         if year == "2016":
             pass
@@ -60,7 +60,7 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
             pass
 
 def btn_analysis_press(traffic,year,frame_display,label_status_display):
-    #TODO: add functionality to analysis_button
+    #TODO: figs finished, needs display work (also merging)
     if traffic == "Accidents":
         if year == "2016":
             pass
@@ -82,7 +82,7 @@ def btn_analysis_press(traffic,year,frame_display,label_status_display):
             pass
 
 def btn_map_press(traffic,year,frame_display,label_status_display):
-    #TODO: add functionality to map_button
+    #accidents needs merging
     if traffic == "Accidents":
         if year == "2016":
             pass
@@ -92,7 +92,7 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
 
         if year == "2018":
             pass
-
+    #needs merging and with my parsing functions
     if traffic == "Traffic volume":
         if year == "2016":
             pass
@@ -122,7 +122,6 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
 
 #TODO: formatting of col width
 def print_table(result_list,frame_display):
-
     for items in frame_display.winfo_children():
         items.destroy()
 
@@ -167,4 +166,19 @@ def print_table(result_list,frame_display):
 def results_list(collection_name):
     collection = db[collection_name]
     results = list(collection.find({}))
+
     return results
+
+    
+def results_list_2018(collection_name):
+    collection = db[collection_name]
+    results = list(collection.find({}))
+
+    results_2018 = []
+
+    for result in results:
+        if "2018" in result["START_DT"]:
+            results_2018.append(result)
+            
+    return results_2018
+
