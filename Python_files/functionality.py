@@ -41,6 +41,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
                 # invoke results_list function which exports the collection (2016 incidents) from mongodb
                 # assign the list to 'results'
                 results = results_list("Traffic_Incidents_Archive_2016")
+
                 # print the table in GUI
                 print_table(results,frame_display)
 
@@ -48,6 +49,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             if year == "2017":
                 # invoke results_list function which exports the collection (2017 incidents) from mongodb
                 results = results_list("Traffic_Incidents_Archive_2017")
+
                 # print the table in GUI
                 print_table(results,frame_display)
 
@@ -57,6 +59,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
                 # results_list_2018 function extracts 2018 incidents from the 'Traffic_Incidents' collection
                 # invoke results_list_2018 function which exports collection from mongodb and extracts 2018 data
                 results = results_list_2018("Traffic_Incidents")
+
                 # print the table in GUI
                 print_table(results,frame_display)
 
@@ -66,6 +69,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             if year == "2016":
                 # invoke results_list function which exports the collection (2016 traffic volume) from mongodb
                 results = results_list("TrafficFlow2016_OpenData")
+
                 # print the table in GUI
                 print_table(results,frame_display)
             
@@ -73,6 +77,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             if year == "2017":
                 # invoke results_list function which exports the collection (2017 traffic volume) from mongodb
                 results = results_list("2017_Traffic_Volume_Flow")
+
                 # print the table in GUI
                 print_table(results,frame_display)
             
@@ -80,6 +85,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             if year == "2018":
                 # invoke results_list function which exports the collection (2018 traffic volume) from mongodb
                 results = results_list("Traffic_Volumes_for_2018")
+
                 # print the table in GUI
                 print_table(results,frame_display)
     
@@ -102,6 +108,7 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
                 # invoke results_list function which exports the collection (sorted 2016 incidents) from mongodb
                 # assign the list to 'results'
                 results = results_list("Traffic_Incidents_Archive_2016_sorted_freq")
+                
                 # print the table in GUI
                 print_table(results,frame_display)
             
@@ -110,6 +117,7 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
                 # invoke results_list function which exports the collection (sorted 2017 incidents) from mongodb
                 # assign the list to 'results'
                 results = results_list("Traffic_Incidents_Archive_2017_sorted_freq")
+
                 # print the table in GUI
                 print_table(results,frame_display)
 
@@ -117,6 +125,7 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
             if year == "2018":
                 # invoke results_list function which exports the collection (sorted 2018 incidents) from mongodb
                 results = results_list("Traffic_Incidents_Archive_2018_sorted_freq")
+
                 # print the table in GUI
                 print_table(results,frame_display)
 
@@ -127,10 +136,12 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
                 # invoke results_list function which exports the collection (2016 traffic volume) from mongodb
                 # assign the list to 'results'
                 results = results_list("TrafficFlow2016_OpenData")
+
                 # sort the 'results' list
                 # 'itemgetter' is imported from the 'operator' module
                 # select all the keys associated with volume, then sort the list in descending order of volume
                 results.sort(key = itemgetter('volume'), reverse = True)
+
                 # print the table in GUI
                 print_table(results,frame_display)
 
@@ -139,10 +150,12 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
                 # invoke results_list function which exports the collection (2017 traffic volume) from mongodb
                 # assign the list to 'results'
                 results = results_list("2017_Traffic_Volume_Flow")
+
                 # sort the 'results' list
                 # 'itemgetter' is imported from the 'operator' module
                 # select all the keys associated with volume, then sort the list in descending order of volume
                 results.sort(key = itemgetter('volume'), reverse = True)
+
                 # print the table in GUI
                 print_table(results,frame_display)
             
@@ -151,10 +164,12 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
                 # invoke results_list function which exports the collection (2018 traffic volume) from mongodb
                 # assign the list to 'results'
                 results = results_list("Traffic_Volumes_for_2018")
+
                 # sort the 'results' list
                 # 'itemgetter' is imported from the 'operator' module
                 # select all the keys associated with volume, then sort the list in descending order of volume
                 results.sort(key = itemgetter('VOLUME'), reverse = True)
+
                 # print the table in GUI
                 print_table(results,frame_display)
     
@@ -178,7 +193,7 @@ def btn_analysis_press(traffic,year,frame_display,label_status_display):
     except:
          label_status_display.config(bg="red", text= "Analysis Error")
 
-
+#TODO: update map button for "max" accident/volume
 def btn_map_press(traffic,year,frame_display,label_status_display):
     try:
         #update Status
@@ -196,7 +211,6 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
                 print_map(frame_display,"Traffic_Incidents_Archive_2018_sorted_freq")
                 pass
         
-        #TODO: currently creates huge html files that basically cant be loaded, needs less markers somehow (some sort of grouping required or instead of markers, heat map?)
         if traffic == "Traffic volume":
             if year == "2016":
                 print_map_2(frame_display,"TrafficFlow2016_OpenData")
@@ -209,6 +223,7 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
             if year == "2018":
                 print_map_2(frame_display,"Traffic_Volumes_for_2018", 2018)
                 pass
+
     #if error occurs
     except:
          label_status_display.config(bg="red", text= "Map Error")
@@ -231,7 +246,6 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
 #             entry.insert("end", list_rows[i][j])
 
 #~READ START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#TODO: formatting of col width
 def print_table(result_list,frame_display):
     for items in frame_display.winfo_children():
         items.destroy()
@@ -558,38 +572,67 @@ def parse_multicoordinates(s,volume):
     return list_long,list_lat,list_volume
 
 
-#given a database return a list of longs,lats and volumes
+#given a database return a list of lats,longs and volumes
 def database_parse_multicoordinates(collection):
-    list_multi_line_string = list(collection.find({},{"the_geom": 1, "_id": 0}))
-    list_volume = list(collection.find({},{"volume": 1, "_id": 0}))
+    #parses the top 20 by volume
+    results = list(collection.find({},{"the_geom": 1, "volume": 1, "_id": 0}))
+    results.sort(key = itemgetter('volume'), reverse = True)
 
     list_long = []
     list_lat = []
     list_volume_extended = []
 
-    for string,volume in zip(list_multi_line_string,list_volume):
-        long,lat,vol = parse_multicoordinates(string["the_geom"],volume["volume"])
+    for result in results[:20]:
+        long,lat,vol = parse_multicoordinates(result["the_geom"],result["volume"])
         list_long.extend(long)
         list_lat.extend(lat)
         list_volume_extended.extend(vol)
+
+    #no parsing, uses the whole file
+    # list_multi_line_string = list(collection.find({},{"the_geom": 1, "_id": 0}))
+    # list_volume = list(collection.find({},{"volume": 1, "_id": 0}))
+
+    # list_long = []
+    # list_lat = []
+    # list_volume_extended = []
+
+    # for string,volume in zip(list_multi_line_string,list_volume):
+    #     long,lat,vol = parse_multicoordinates(string["the_geom"],volume["volume"])
+    #     list_long.extend(long)
+    #     list_lat.extend(lat)
+    #     list_volume_extended.extend(vol)
 
     return list_long,list_lat,list_volume_extended
 
-
-#given a database return a list of longs,lats and volumes for 2018
+#given a database return a list of lats,longs and volumes for 2018
 def database_parse_multicoordinates_2018(collection):
-    list_multi_line_string = list(collection.find({},{"multilinestring": 1, "_id": 0}))
-    list_volume = list(collection.find({},{"VOLUME": 1, "_id": 0}))
+    #parses the top 20 by volume
+    results = list(collection.find({},{"multilinestring": 1, "VOLUME": 1, "_id": 0}))
+    results.sort(key = itemgetter('VOLUME'), reverse = True)
 
     list_long = []
     list_lat = []
     list_volume_extended = []
 
-    for string,volume in zip(list_multi_line_string,list_volume):
-        long,lat,vol = parse_multicoordinates(string["multilinestring"],volume["VOLUME"])
+    for result in results[:20]:
+        long,lat,vol = parse_multicoordinates(result["multilinestring"],result["VOLUME"])
         list_long.extend(long)
         list_lat.extend(lat)
         list_volume_extended.extend(vol)
+
+    #no parsing, uses the whole file
+    # list_multi_line_string = list(collection.find({},{"multilinestring": 1, "_id": 0}))
+    # list_volume = list(collection.find({},{"VOLUME": 1, "_id": 0}))
+
+    # list_long = []
+    # list_lat = []
+    # list_volume_extended = []
+
+    # for string,volume in zip(list_multi_line_string,list_volume):
+    #     long,lat,vol = parse_multicoordinates(string["multilinestring"],volume["VOLUME"])
+    #     list_long.extend(long)
+    #     list_lat.extend(lat)
+    #     list_volume_extended.extend(vol)
         
     return list_long,list_lat,list_volume_extended
 #~MAP END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
