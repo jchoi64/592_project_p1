@@ -358,7 +358,7 @@ def print_analysis(frame_display,collection_name):
     
     fig=Figure(figsize = (5,4),dpi=100)
 
-    a=fig.add_subplot(1,1,1).plot(df2.Year, df2.y)
+    a=fig.add_subplot(1,1,1).plot(df2.Year, df2.y,marker = 'o')
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1)
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
     fig.text(0.04, 0.5, 'Total Accidents', va='center', rotation='vertical', size = '14')
@@ -574,7 +574,8 @@ def parse_multicoordinates(s,volume):
 
 #given a database return a list of lats,longs and volumes
 def database_parse_multicoordinates(collection):
-    #parses the top 20 by volume
+    #parses the top x number of rows
+    x = 1
     results = list(collection.find({},{"the_geom": 1, "volume": 1, "_id": 0}))
     results.sort(key = itemgetter('volume'), reverse = True)
 
@@ -582,7 +583,7 @@ def database_parse_multicoordinates(collection):
     list_lat = []
     list_volume_extended = []
 
-    for result in results[:20]:
+    for result in results[:x]:
         long,lat,vol = parse_multicoordinates(result["the_geom"],result["volume"])
         list_long.extend(long)
         list_lat.extend(lat)
@@ -606,7 +607,8 @@ def database_parse_multicoordinates(collection):
 
 #given a database return a list of lats,longs and volumes for 2018
 def database_parse_multicoordinates_2018(collection):
-    #parses the top 20 by volume
+    #parses the top x number of rows
+    x = 1
     results = list(collection.find({},{"multilinestring": 1, "VOLUME": 1, "_id": 0}))
     results.sort(key = itemgetter('VOLUME'), reverse = True)
 
@@ -614,7 +616,7 @@ def database_parse_multicoordinates_2018(collection):
     list_lat = []
     list_volume_extended = []
 
-    for result in results[:20]:
+    for result in results[:x]:
         long,lat,vol = parse_multicoordinates(result["multilinestring"],result["VOLUME"])
         list_long.extend(long)
         list_lat.extend(lat)
