@@ -200,11 +200,11 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
         label_status_display.config(bg="#00FF00", text= "Successfully written map")
         if traffic == "Accidents":
             if year == "2016":
-                print_map(frame_display,"Traffic_Incidents_Archive_2016")
+                print_map(frame_display,"Traffic_Incidents_Archive_2016_sorted_freq")
                 pass
 
             if year == "2017":
-                print_map(frame_display,"Traffic_Incidents_Archive_2017")
+                print_map(frame_display,"Traffic_Incidents_Archive_2017_sorted_freq")
                 pass
             
             if year == "2018":
@@ -494,30 +494,59 @@ def print_map(frame_display,collection_name):
         items.destroy()
     
     collection = db[collection_name]
-    Lat = list(collection.find({}, {"Latitude":1,"_id":0}))
-    Long = list(collection.find({}, {"Longitude":1,"_id":0}))
-    Count = list(collection.find({}, {"Count":1,"_id":0}))
-    
+    freq = list(collection.find({"_id":0}, {"freq":1,"_id":0}))
+    max_freq = freq[0]["freq"]
+
+    Lat = list(collection.find({"freq":max_freq}, {"Latitude":1,"_id":0}))
+    Long = list(collection.find({"freq":max_freq}, {"Longitude":1,"_id":0}))
+    section = list(collection.find({"freq":max_freq}, {"INCIDENT INFO":1,"_id":0}))
+
     list_lat = []
     for result in Lat:
         list_lat.append(result["Latitude"])
-    
+        
     list_long = []
     for result in Long:
         list_long.append(result["Longitude"])  
-    
-    list_count = []
-    for result in Count:
-        list_count.append(result["Count"])
         
-    df=pd.DataFrame({'Latitude':list_lat,'Longitude' : list_long, 'Count' : list_count})
+    list_section = []
+    for result in section:
+        list_section.append(result["INCIDENT INFO"])
+    # print(list_section)
+    section_unique = len(set(list_section))
+
+    average_lat = [0]*section_unique
+    average_long = [0]*section_unique
+    list_freq = [max_freq]*section_unique
+
+    for i in range(section_unique):
+        average_lat[i] = sum(list_lat[i*max_freq:(i+1)*max_freq])/max_freq
+        average_long[i] = sum(list_long[i*max_freq:(i+1)*max_freq])/max_freq
+
+    # Lat = list(collection.find({}, {"Latitude":1,"_id":0}))
+    # Long = list(collection.find({}, {"Longitude":1,"_id":0}))
+    # Count = list(collection.find({}, {"Count":1,"_id":0}))
+    
+    # list_lat = []
+    # for result in Lat:
+    #     list_lat.append(result["Latitude"])
+    
+    # list_long = []
+    # for result in Long:
+    #     list_long.append(result["Longitude"])  
+    
+    # list_count = []
+    # for result in Count:
+    #     list_count.append(result["Count"])
+        
+    df=pd.DataFrame({'Latitude':average_lat,'Longitude' : average_long, 'frequency' : list_freq})
     
     
     #can I make it start on looking at locaiton of most accidents?
-    map_osm = folium.Map(location=[51.0673798693422,-114.028551292521], tiles='Stamen Toner', zoom_start=13)
+    map_osm = folium.Map(location=[average_lat[0],average_long[0]], tiles='Stamen Toner', zoom_start=13)
     
     for index, row in df.iterrows():
-        folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['Count']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
+        folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['frequency']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
    
     map_osm
     map_osm.save('C:/Users/Jun/Documents/uofc work/ENSF 592/Project/HTML_files/map.html')
@@ -553,12 +582,15 @@ def print_map_2(frame_display,collection_name,year = 2016):
     else:
         list_long, list_lat, list_volume = database_parse_multicoordinates(collection)
 
+    average_long = [sum(list_long)/len(list_long)]
+    average_lat = [sum(list_lat)/len(list_lat)]
+    volume = [list_volume[0]]
         
-    df=pd.DataFrame({'Latitude':list_lat,'Longitude' : list_long, 'Volume' : list_volume})
+    df=pd.DataFrame({'Latitude':average_lat,'Longitude' : average_long, 'Volume' : volume})
     
     
     #can I make it start on looking at locaiton of most accidents?
-    map_osm = folium.Map(location=[51.0673798693422,-114.028551292521], tiles='Stamen Toner', zoom_start=13)
+    map_osm = folium.Map(location=[average_lat[0],average_long[0]], tiles='Stamen Toner', zoom_start=13)
     
     for index, row in df.iterrows():
         folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['Volume']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
@@ -594,9 +626,9 @@ def parse_multicoordinates(s,volume):
 
     for i in range(len(s_split)):
         if i % 2 == 0:
-            list_long.append(s_split[i])
+            list_long.append(float(s_split[i]))
         else:
-            list_lat.append(s_split[i])
+            list_lat.append(float(s_split[i]))
 
     return list_long,list_lat,list_volume
 
