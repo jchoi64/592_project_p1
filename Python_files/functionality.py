@@ -315,42 +315,62 @@ def print_analysis(frame_display,collection_name):
     for items in frame_display.winfo_children():
         items.destroy()
     
-    #create colelction
-    collection = db[collection_name]
-    #create lists of needed data
-    year = list(collection.find({}, {"START_DT":1,"_id":0}))
-    id_ = list(collection.find({}, {"id":1,"_id":0}))
-    Count= list(collection.find({}, {"Count":1,"_id":0}))
+    collection1 = db["Traffic_Incidents_Archive_2016_sorted_freq"]
+    collection2 = db["Traffic_Incidents_Archive_2017_sorted_freq"]
+    collection3 = db["Traffic_Incidents_Archive_2018_sorted_freq"]
 
+    acc2016 = list(collection1.find({}, {"freq":1,"_id":0}))
+    acc2017 = list(collection2.find({}, {"freq":1,"_id":0}))
+    acc2018 = list(collection3.find({}, {"freq":1,"_id":0}))
 
-    list_year = []
-    #format lists
-    for result in year:
-        list_year.append(result["START_DT"])
+    #~~~~~~~~~~~~2016~~~~~~~~~~~~~~~~~
+
     
-    #output only year in a list (explude month, day and time)
-    list_year2= [x[6:-12] for x in list_year]    
+    #create list of 2016 accidents
+    list_acc2016= []
+    for result in acc2016:
+        list_acc2016.append(result["freq"])
+    
+    #find max
+    accSum2016 = 0;
+    for i in list_acc2016:
+        if i>accSum2016:
+            accSum2016=i
    
-    #print(list_year2) <--- used as a check
- 
-    list_id = []
-    #format lists
-    for result in id_:
-        list_id.append(result["id"])  
+    #~~~~~~~~~~~~2017~~~~~~~~~~~~~~~~~
 
-    list_count = []
-    #format lists
-    for result in Count:
-        list_count.append(result["Count"])
-      
-    #create dataframe by combining lists
-    df=pd.DataFrame({'Year':list_year2,'Count':list_count})
+     #create list of 2017 accidents
+    list_acc2017= []
+    for result in acc2017:
+        list_acc2017.append(result["freq"])
+    
+    #find max
+    accSum2017 = 0;
+    for i in list_acc2017:
+        if i>accSum2017:
+            accSum2017=i
+    #~~~~~~~~~~~~2018~~~~~~~~~~~~~~~~~
 
-    #sort dataframe
-    df2=df['Year'].value_counts().to_frame('y').rename_axis('Year').reset_index()
-    df2=df2.sort_values("Year",axis=0, ascending = True)
 
-    #print(df2) <-- used as a check
+     #create list of 2018 accidents
+    list_acc2018= []
+    for result in acc2018:
+        list_acc2018.append(result["freq"])
+
+    #find max
+    accSum2018 = 0;
+    for i in list_acc2018:
+        if i>accSum2018:
+            accSum2018=i
+
+
+    #create table
+    table = {'Year': ['2016','2017','2018'],
+             'Accidents' : [accSum2016, accSum2017, accSum2018]}
+    
+    df=pd.DataFrame(data=table)
+
+
     
     """
     create figure
@@ -358,11 +378,11 @@ def print_analysis(frame_display,collection_name):
     
     fig=Figure(figsize = (5,4),dpi=100)
 
-    a=fig.add_subplot(1,1,1).plot(df2.Year, df2.y,marker = 'o')
+    a=fig.add_subplot(1,1,1).plot(df.Year, df.Accidents, marker = 'o')
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1)
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
-    fig.text(0.04, 0.5, 'Total Accidents', va='center', rotation='vertical', size = '14')
-    fig.text(0.5, 0.9, 'Total Accidents per Year', ha='center', size = '24')
+    fig.text(0.04, 0.5, 'Maximum Accidents', va='center', rotation='vertical', size = '14')
+    fig.text(0.5, 0.9, 'Maximum Accidents per Year', ha='center', size = '24')
    
     canvas = FigureCanvasTkAgg(fig, frame_display)
 
@@ -397,57 +417,66 @@ def print_analysis2(frame_display,collection_name):
 
     #~~~~~~~~~~~~2016~~~~~~~~~~~~~~~~~
 
+    #create list of 2016 volumes
     list_vol2016= []
     for result in volume2016:
         list_vol2016.append(result["volume"])
-    
-    volSum2016 = 0
+        
+    #find max
+    volSum2016 = 0;
     for i in list_vol2016:
-        volSum2016 += i
+        if i>volSum2016:
+            volSum2016=i
    
     #~~~~~~~~~~~~2017~~~~~~~~~~~~~~~~~
 
+    #create list of 2017 volumes
     list_vol2017= []
     for result in volume2017:
         list_vol2017.append(result["volume"])
     
-    volSum2017 = 0
+    #find max
+    volSum2017 = 0;
     for i in list_vol2017:
-        volSum2017 += i
+        if i>volSum2017:
+            volSum2017=i
+            #~~~~~~~~~~~~2018~~~~~~~~~~~~~~~~~
 
-    #~~~~~~~~~~~~2018~~~~~~~~~~~~~~~~~
 
+    #create list of 2017 volumes
     list_vol2018= []
     for result in volume2018:
         list_vol2018.append(result["VOLUME"])
 
-    volSum2018 = 0
+#find max
+    volSum2018 = 0;
     for i in list_vol2018:
-        volSum2018 += i
+        if i>volSum2018:
+            volSum2018=i
 
+    #create table to inport into df
     table = {'Year': ['2016','2017','2018'],
-             'Volume' : [volSum2016, volSum2017, volSum2018]}
+         'Volume' : [volSum2016, volSum2017, volSum2018]}
 
 
-
+    #import into df
     df=pd.DataFrame(data=table)
     
     """
     create figure
     """
     
+    #set up figure dimensions and subplot
     fig=Figure(figsize = (5,4),dpi=100)
 
-    a=fig.add_subplot(1,1,1).plot(df.Year, df.Volume)
+    a=fig.add_subplot(1,1,1).plot(df.Year, df.Volume, marker = 'o')
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1) 
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
-    fig.text(0.04, 0.5, 'Total Traffic Volume', va='center', rotation='vertical', size = '14')
-    fig.text(0.5, 0.9, 'Total Traffic Volume per Year', ha='center', size = '24')
+    fig.text(0.04, 0.5, 'Maximum Traffic Volume', va='center', rotation='vertical', size = '14')
+    fig.text(0.5, 0.9, 'Maximum Traffic Volume per Year', ha='center', size = '24')
 
     canvas = FigureCanvasTkAgg(fig, frame_display)
-    #fig.set_xlabel('x')
-    #fig.set_ylabel('y')
-
+    
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
    
