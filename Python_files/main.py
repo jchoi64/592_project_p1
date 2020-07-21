@@ -69,7 +69,6 @@ class project_GUI(tk.Tk):
             bg = "grey",
         )
 
-        #TODO: update status display depending on success/failure
         label_status_display = tk.Label(
             master = label_status,
             width = 20,
