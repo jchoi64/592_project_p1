@@ -1,6 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-from functionality import *
+from functionality import (
+    btn_analysis_press,
+    btn_map_press,
+    btn_read_press,
+    btn_sort_press,
+)
 
 class project_GUI(tk.Tk):
 

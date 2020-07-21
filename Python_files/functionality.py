@@ -332,7 +332,7 @@ def print_analysis(frame_display,collection_name):
         list_acc2016.append(result["freq"])
     
     #find max
-    accSum2016 = 0;
+    accSum2016 = 0
     for i in list_acc2016:
         if i>accSum2016:
             accSum2016=i
@@ -345,7 +345,7 @@ def print_analysis(frame_display,collection_name):
         list_acc2017.append(result["freq"])
     
     #find max
-    accSum2017 = 0;
+    accSum2017 = 0
     for i in list_acc2017:
         if i>accSum2017:
             accSum2017=i
@@ -358,7 +358,7 @@ def print_analysis(frame_display,collection_name):
         list_acc2018.append(result["freq"])
 
     #find max
-    accSum2018 = 0;
+    accSum2018 = 0
     for i in list_acc2018:
         if i>accSum2018:
             accSum2018=i
@@ -378,7 +378,7 @@ def print_analysis(frame_display,collection_name):
     
     fig=Figure(figsize = (5,4),dpi=100)
 
-    a=fig.add_subplot(1,1,1).plot(df.Year, df.Accidents, marker = 'o')
+    fig.add_subplot(1,1,1).plot(df.Year, df.Accidents, marker = 'o')
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1)
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
     fig.text(0.04, 0.5, 'Maximum Accidents', va='center', rotation='vertical', size = '14')
@@ -406,13 +406,13 @@ def print_analysis2(frame_display,collection_name):
     collection2 = db["2017_Traffic_Volume_Flow"]
     collection3 = db["Traffic_Volumes_for_2018"]
 
-    year2016 = list(collection1.find({}, {"year_vol":1,"_id":0}))
+    # year2016 = list(collection1.find({}, {"year_vol":1,"_id":0}))
     volume2016 = list(collection1.find({}, {"volume":1,"_id":0}))
 
-    year2017 = list(collection2.find({}, {"year":1,"_id":0}))
+    # year2017 = list(collection2.find({}, {"year":1,"_id":0}))
     volume2017 = list(collection2.find({}, {"volume":1,"_id":0}))
 
-    year2018 = list(collection3.find({}, {"YEAR":1,"_id":0}))
+    # year2018 = list(collection3.find({}, {"YEAR":1,"_id":0}))
     volume2018 = list(collection3.find({}, {"VOLUME":1,"_id":0}))
 
     #~~~~~~~~~~~~2016~~~~~~~~~~~~~~~~~
@@ -423,7 +423,7 @@ def print_analysis2(frame_display,collection_name):
         list_vol2016.append(result["volume"])
         
     #find max
-    volSum2016 = 0;
+    volSum2016 = 0
     for i in list_vol2016:
         if i>volSum2016:
             volSum2016=i
@@ -436,7 +436,7 @@ def print_analysis2(frame_display,collection_name):
         list_vol2017.append(result["volume"])
     
     #find max
-    volSum2017 = 0;
+    volSum2017 = 0
     for i in list_vol2017:
         if i>volSum2017:
             volSum2017=i
@@ -449,7 +449,7 @@ def print_analysis2(frame_display,collection_name):
         list_vol2018.append(result["VOLUME"])
 
 #find max
-    volSum2018 = 0;
+    volSum2018 = 0
     for i in list_vol2018:
         if i>volSum2018:
             volSum2018=i
@@ -469,7 +469,7 @@ def print_analysis2(frame_display,collection_name):
     #set up figure dimensions and subplot
     fig=Figure(figsize = (5,4),dpi=100)
 
-    a=fig.add_subplot(1,1,1).plot(df.Year, df.Volume, marker = 'o')
+    fig.add_subplot(1,1,1).plot(df.Year, df.Volume, marker = 'o')
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1) 
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
     fig.text(0.04, 0.5, 'Maximum Traffic Volume', va='center', rotation='vertical', size = '14')
