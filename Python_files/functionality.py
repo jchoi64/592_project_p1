@@ -48,7 +48,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
             # if user selects year '2017'
             if year == "2017":
                 # invoke results_list function which exports the collection (2017 incidents) from mongodb
-                results = results_list("Traffic_Incidents_Archive_2017")
+                results = results_list_2017("Traffic_Incidents_Archive_2017")
 
                 # print the table in GUI
                 print_table(results,frame_display)
@@ -184,10 +184,10 @@ def btn_analysis_press(traffic,year,frame_display,label_status_display):
         #update Status
         label_status_display.config(bg="#00FF00", text= "Successfully analyzed")
         if traffic == "Accidents":
-            print_analysis(frame_display,"Traffic_Incidents")
+            print_analysis(frame_display)
                 
         if traffic == "Traffic volume":
-            print_analysis2(frame_display,"Traffic_Incidents")
+            print_analysis2(frame_display)
 
     #if error occurs
     except:
@@ -290,14 +290,26 @@ def print_table(result_list,frame_display):
 
 def results_list(collection_name):
     collection = db[collection_name]
-    results = list(collection.find({}))
+    results = list(collection.find({}).sort("_id",1))
 
     return results
+
+def results_list_2017(collection_name):
+    collection = db[collection_name]
+    results = list(collection.find({}).sort("_id",1))
+
+    results_2017 = []
+
+    for result in results:
+        if "2017" in result["START_DT"]:
+            results_2017.append(result)
+            
+    return results_2017
 
     
 def results_list_2018(collection_name):
     collection = db[collection_name]
-    results = list(collection.find({}))
+    results = list(collection.find({}).sort("_id",1))
 
     results_2018 = []
 
@@ -310,7 +322,7 @@ def results_list_2018(collection_name):
 #~READ END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~ANALYSIS START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def print_analysis(frame_display,collection_name):
+def print_analysis(frame_display):
     
     for items in frame_display.winfo_children():
         items.destroy()
@@ -397,7 +409,7 @@ def print_analysis(frame_display,collection_name):
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
 
-def print_analysis2(frame_display,collection_name):
+def print_analysis2(frame_display):
     
     for items in frame_display.winfo_children():
         items.destroy()
@@ -497,9 +509,9 @@ def print_map(frame_display,collection_name):
     freq = list(collection.find({"_id":0}, {"freq":1,"_id":0}))
     max_freq = freq[0]["freq"]
 
-    Lat = list(collection.find({"freq":max_freq}, {"Latitude":1,"_id":0}))
-    Long = list(collection.find({"freq":max_freq}, {"Longitude":1,"_id":0}))
-    section = list(collection.find({"freq":max_freq}, {"INCIDENT INFO":1,"_id":0}))
+    Lat = list(collection.find({"freq":max_freq}, {"Latitude":1,"_id":0}).sort("_id",1))
+    Long = list(collection.find({"freq":max_freq}, {"Longitude":1,"_id":0}).sort("_id",1))
+    section = list(collection.find({"freq":max_freq}, {"INCIDENT INFO":1,"_id":0}).sort("_id",1))
 
     list_lat = []
     for result in Lat:
