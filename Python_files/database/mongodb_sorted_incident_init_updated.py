@@ -37,7 +37,7 @@ def insert_collection_freq_by_year(file_name, year):
         print("Problem in inserting: ",file_name)
 
 cluster = MongoClient(mongodb_userinfo.connection_string())
-db = cluster["592_Project_1"]
+db = cluster["592_Project_Presentation"]
 
 for year in range(2016, 2019):
     insert_collection_freq_by_year("Traffic_Incidents.csv", year)
