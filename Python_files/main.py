@@ -7,6 +7,7 @@ from functionality import (
     btn_sort_press,
 )
 
+#project_GUI class that encompasses the overall GUI
 class project_GUI(tk.Tk):
 
     def __init__(self,*args, **kwargs):
@@ -39,7 +40,7 @@ class project_GUI(tk.Tk):
         #     )
         #display.pack(expand = True,fill = "both")
 
-        #items to be added to frame_buttons
+        #items to be added to frame_buttons frame
         list_btn = []
 
         #combo boxes
@@ -151,9 +152,11 @@ class project_GUI(tk.Tk):
         frame_buttons.pack(expand = False,fill = "y",side = "left")
         frame_display.pack(expand = True,fill = "both",side = "right")
 
+    #keeps the GUI open
     def run_GUI(self):
         self.mainloop()
 
+#proj_button class for quick creation of buttons
 class proj_button(tk.Button):
 
     def __init__(self, *args, **kwargs):

@@ -31,7 +31,7 @@ db = cluster["592_Project_1"]
 # this function handles operations when the read button is clicked
 def btn_read_press(traffic,year,frame_display,label_status_display):
     try:
-        # update Status
+        # update status
         label_status_display.config(bg="#00FF00", text= "Successfully read from DB")
         
         # if user selects 'Accidents'
@@ -47,7 +47,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
 
             # if user selects year '2017'
             if year == "2017":
-                # invoke results_list function which exports the collection (2017 incidents) from mongodb
+                # invoke results_list_2017 function which exports the collection (2017 incidents) from mongodb
                 results = results_list_2017("Traffic_Incidents_Archive_2017")
 
                 # print the table in GUI
@@ -98,7 +98,7 @@ def btn_read_press(traffic,year,frame_display,label_status_display):
 # this function handles operations when the sort button is clicked
 def btn_sort_press(traffic,year,frame_display,label_status_display):
     try:
-        # Update States
+        # update status
         label_status_display.config(bg="#00FF00", text= "Successfully sorted")
         
         # if user selects 'Accidents'
@@ -178,49 +178,69 @@ def btn_sort_press(traffic,year,frame_display,label_status_display):
         # display error message in the status window, in this case it would be 'sort error'
         label_status_display.config(bg="red", text= "Sort Error")
 
-
+# this function handles operations when the analysis button is clicked
 def btn_analysis_press(traffic,year,frame_display,label_status_display):
     try:
-        #update Status
+        #update status
         label_status_display.config(bg="#00FF00", text= "Successfully analyzed")
+
+        # if user selects 'Accidents'
         if traffic == "Accidents":
+            #prints graph of higest frequent accident area per year
             print_analysis(frame_display)
-                
+
+        # if user selects 'Traffic'        
         if traffic == "Traffic volume":
+            #prints graph of highest volume area per year
             print_analysis2(frame_display)
 
     #if error occurs
     except:
          label_status_display.config(bg="red", text= "Analysis Error")
 
-#TODO: update map button for "max" accident/volume
+# this function handles operations when the map button is clicked
 def btn_map_press(traffic,year,frame_display,label_status_display):
     try:
-        #update Status
+        #update status
         label_status_display.config(bg="#00FF00", text= "Successfully written map")
+
+        # if user selects 'Accidents'
         if traffic == "Accidents":
+            # if user selects year '2016'
             if year == "2016":
+                #creates html map based on accident data
                 print_map(frame_display,"Traffic_Incidents_Archive_2016_sorted_freq")
                 pass
-
+            
+            # if user selects year '2017'
             if year == "2017":
+                #creates html map based on accident data
                 print_map(frame_display,"Traffic_Incidents_Archive_2017_sorted_freq")
                 pass
             
+            # if user selects year '2018'
             if year == "2018":
+                #creates html map based on accident data
                 print_map(frame_display,"Traffic_Incidents_Archive_2018_sorted_freq")
                 pass
         
+        # if user selects 'Traffic'
         if traffic == "Traffic volume":
+            # if user selects year '2016'
             if year == "2016":
+                #creates html map based on traffic volume data
                 print_map_2(frame_display,"TrafficFlow2016_OpenData")
                 pass
-
+            
+            # if user selects year '2017'
             if year == "2017":
+                #creates html map based on traffic volume data
                 print_map_2(frame_display,"2017_Traffic_Volume_Flow")
                 pass
 
+            # if user selects year '2018'
             if year == "2018":
+                #creates html map based on traffic volume data
                 print_map_2(frame_display,"Traffic_Volumes_for_2018", 2018)
                 pass
 
@@ -246,10 +266,13 @@ def btn_map_press(traffic,year,frame_display,label_status_display):
 #             entry.insert("end", list_rows[i][j])
 
 #~READ START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#given a list of dictionaries from DB import, create a table using Treeview
 def print_table(result_list,frame_display):
+    #destroy all children elements in the frame
     for items in frame_display.winfo_children():
         items.destroy()
 
+    #initialize Treeview and scroll bar
     tree = ttk.Treeview(frame_display)
     tree['show'] = 'headings'
 
@@ -263,37 +286,50 @@ def print_table(result_list,frame_display):
     
     #columns
     list_cols = []
+
+    #extract column headers
     for result in result_list[0]:
         list_cols.append(result)
-    col_names = list_cols
-    tree["columns"] = col_names[1:]
+
+    #sets the number of columns needed
+    tree["columns"] = list_cols[1:]
+
+    #sets the column to the header
     counter = 0
-    for col in col_names[1:]:
+    for col in list_cols[1:]:
         tree.heading(counter,text = col,anchor = "w")
         counter += 1
 
+    #rows
     list_rows = []
+
+    #converts values of the dictionary to a list format
     for i in range(len(result_list)):
         list_rows.append([])
+
         for key,value in result_list[i].items():
+            #skips _id/row value
             if key == "_id":
                 continue
             list_rows[i].append(value)
 
+    #sets the rows from the values obtained
     for i in range(len(list_rows)):
         tree.insert("",i,text = "",values = list_rows[i])
 
+    #packs the items into the frame
     tree_scroll_y.pack(side = "right", fill = "y")
     tree_scroll_x.pack(side = "bottom", fill = "x")
     tree.pack(side = "left",expand = 1, fill = "both")
 
-
+#returns a list of the database in a given collection name
 def results_list(collection_name):
     collection = db[collection_name]
     results = list(collection.find({}).sort("_id",1))
 
     return results
 
+#returns a list of the database in a given collection name (only 2017 data)
 def results_list_2017(collection_name):
     collection = db[collection_name]
     results = list(collection.find({}).sort("_id",1))
@@ -306,7 +342,7 @@ def results_list_2017(collection_name):
             
     return results_2017
 
-    
+#returns a list of the database in a given collection name (only 2018 data)    
 def results_list_2018(collection_name):
     collection = db[collection_name]
     results = list(collection.find({}).sort("_id",1))
@@ -322,8 +358,9 @@ def results_list_2018(collection_name):
 #~READ END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~ANALYSIS START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#prints graph of higest frequent accident area per year
 def print_analysis(frame_display):
-    
+    #destroy all children elements in the frame
     for items in frame_display.winfo_children():
         items.destroy()
     
@@ -388,29 +425,34 @@ def print_analysis(frame_display):
     create figure
     """
     
+    #initialize figure
     fig=Figure(figsize = (5,4),dpi=100)
 
+    #adds plot
     fig.add_subplot(1,1,1).plot(df.Year, df.Accidents, marker = 'o')
     fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1)
+
+    #adds title and labels
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
     fig.text(0.04, 0.5, 'Maximum Accidents', va='center', rotation='vertical', size = '14')
     fig.text(0.5, 0.9, 'Maximum Accidents per Year', ha='center', size = '24')
    
+    #initialize canvas widget
     canvas = FigureCanvasTkAgg(fig, frame_display)
 
-
+    #pack canvas onto frame
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
    
         
-    ##figure tool bar, maybe not neccessary
+    #figure tool bar, maybe not neccessary
     toolbar = NavigationToolbar2Tk(canvas, frame_display)
     toolbar.update()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-
+#prints graph of highest volume area per year
 def print_analysis2(frame_display):
-    
+    #destroy all children elements in the frame
     for items in frame_display.winfo_children():
         items.destroy()
     
@@ -460,13 +502,13 @@ def print_analysis2(frame_display):
     for result in volume2018:
         list_vol2018.append(result["VOLUME"])
 
-#find max
+    #find max
     volSum2018 = 0
     for i in list_vol2018:
         if i>volSum2018:
             volSum2018=i
 
-    #create table to inport into df
+    #create table to import into df
     table = {'Year': ['2016','2017','2018'],
          'Volume' : [volSum2016, volSum2017, volSum2018]}
 
@@ -478,21 +520,25 @@ def print_analysis2(frame_display):
     create figure
     """
     
-    #set up figure dimensions and subplot
+    #initialize figure
     fig=Figure(figsize = (5,4),dpi=100)
 
+    #adds plot
     fig.add_subplot(1,1,1).plot(df.Year, df.Volume, marker = 'o')
-    fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1) 
+    fig.subplots_adjust(left=0.1, right=0.9, bottom=0.1)
+
+    #adds title and labels
     fig.text(0.5, 0.04, 'Year', ha='center', size = '14')
     fig.text(0.04, 0.5, 'Maximum Traffic Volume', va='center', rotation='vertical', size = '14')
     fig.text(0.5, 0.9, 'Maximum Traffic Volume per Year', ha='center', size = '24')
 
+    #initialize canvas widget
     canvas = FigureCanvasTkAgg(fig, frame_display)
     
+    #pack canvas onto frame
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
    
-        
     ##figure tool bar, maybe not neccessary
     toolbar = NavigationToolbar2Tk(canvas, frame_display)
     toolbar.update()
@@ -500,19 +546,24 @@ def print_analysis2(frame_display):
 #~ANALYSIS END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~MAP START~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#creates html map based on accident data
 def print_map(frame_display,collection_name):
-    
+    #destroy all children elements in the frame
     for items in frame_display.winfo_children():
         items.destroy()
     
     collection = db[collection_name]
+
+    #finds the max frequency
     freq = list(collection.find({"_id":0}, {"freq":1,"_id":0}))
     max_freq = freq[0]["freq"]
 
+    #returns a list of the rows that contain this max frequency
     Lat = list(collection.find({"freq":max_freq}, {"Latitude":1,"_id":0}).sort("_id",1))
     Long = list(collection.find({"freq":max_freq}, {"Longitude":1,"_id":0}).sort("_id",1))
     section = list(collection.find({"freq":max_freq}, {"INCIDENT INFO":1,"_id":0}).sort("_id",1))
 
+    #creates a list of the values of the dictionaries
     list_lat = []
     for result in Lat:
         list_lat.append(result["Latitude"])
@@ -523,14 +574,17 @@ def print_map(frame_display,collection_name):
         
     list_section = []
     for result in section:
-        list_section.append(result["INCIDENT INFO"])
+        list_section.append(result["INCIDENT INFO"])   
     # print(list_section)
+
+    #determines the amount of unique locations
     section_unique = len(set(list_section))
 
+    
     average_lat = [0]*section_unique
     average_long = [0]*section_unique
     list_freq = [max_freq]*section_unique
-
+    #calculates the average latitude and longitude of each unique section
     for i in range(section_unique):
         average_lat[i] = sum(list_lat[i*max_freq:(i+1)*max_freq])/max_freq
         average_long[i] = sum(list_long[i*max_freq:(i+1)*max_freq])/max_freq
@@ -550,16 +604,18 @@ def print_map(frame_display,collection_name):
     # list_count = []
     # for result in Count:
     #     list_count.append(result["Count"])
-        
+
+    #creates dataframe from previous values    
     df=pd.DataFrame({'Latitude':average_lat,'Longitude' : average_long, 'frequency' : list_freq})
     
-    
-    #can I make it start on looking at locaiton of most accidents?
+    #creates map object
     map_osm = folium.Map(location=[average_lat[0],average_long[0]], tiles='Stamen Toner', zoom_start=13)
     
+    #places markers based on data
     for index, row in df.iterrows():
         folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['frequency']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
    
+    #saves the map in the directory
     map_osm
     map_osm.save('C:/Users/Jun/Documents/uofc work/ENSF 592/Project/HTML_files/map.html')
 
@@ -579,14 +635,15 @@ def print_map(frame_display,collection_name):
 
     pass
 
-
+#creates html map based on traffic volume data
 def print_map_2(frame_display,collection_name,year = 2016):
-    
+    #destroy all children elements in the frame
     for items in frame_display.winfo_children():
         items.destroy()
     
     collection = db[collection_name]
     
+    #parses multiline string
     #checks if year is 2018
     if year == 2018:
         list_long, list_lat, list_volume = database_parse_multicoordinates_2018(collection)
@@ -594,19 +651,22 @@ def print_map_2(frame_display,collection_name,year = 2016):
     else:
         list_long, list_lat, list_volume = database_parse_multicoordinates(collection)
 
+    #calculates the average latitude and longitude
     average_long = [sum(list_long)/len(list_long)]
     average_lat = [sum(list_lat)/len(list_lat)]
     volume = [list_volume[0]]
-        
+
+    #creates dataframe from previous values     
     df=pd.DataFrame({'Latitude':average_lat,'Longitude' : average_long, 'Volume' : volume})
     
-    
-    #can I make it start on looking at locaiton of most accidents?
+    #creates map object
     map_osm = folium.Map(location=[average_lat[0],average_long[0]], tiles='Stamen Toner', zoom_start=13)
     
+    #places markers based on data
     for index, row in df.iterrows():
         folium.Marker(location=[row['Latitude'], row['Longitude']], popup=str(row['Volume']),icon=folium.Icon(color='red',icon='location', prefix='ion-ios')).add_to(map_osm)
-   
+    
+    #saves the map in the directory
     map_osm
     map_osm.save('C:/Users/Jun/Documents/uofc work/ENSF 592/Project/HTML_files/map.html')
 
@@ -629,6 +689,7 @@ def print_map_2(frame_display,collection_name,year = 2016):
 
 #given a MULTILINESTRING s and volume, return list of longs and list of lats with their count/volume
 def parse_multicoordinates(s,volume):
+    #strips the string of everything that is not a number and splits on spaces
     s_stripped = s.replace("MULTILINESTRING","").replace("(","").replace(")","").replace(",","")
     s_split = s_stripped.split()
 
@@ -636,6 +697,7 @@ def parse_multicoordinates(s,volume):
     list_lat = []
     list_volume = int(len(s_split) /2) *[volume]
 
+    #appends latitudes and longitudes based on long/lat/long/lat... pattern
     for i in range(len(s_split)):
         if i % 2 == 0:
             list_long.append(float(s_split[i]))
@@ -649,6 +711,8 @@ def parse_multicoordinates(s,volume):
 def database_parse_multicoordinates(collection):
     #parses the top x number of rows
     x = 1
+
+    #list of multiline strings and volumes, sorted by largest volume to smallest
     results = list(collection.find({},{"the_geom": 1, "volume": 1, "_id": 0}))
     results.sort(key = itemgetter('volume'), reverse = True)
 
@@ -656,6 +720,7 @@ def database_parse_multicoordinates(collection):
     list_lat = []
     list_volume_extended = []
 
+    #for every row, use the parse_multicoordinates function
     for result in results[:x]:
         long,lat,vol = parse_multicoordinates(result["the_geom"],result["volume"])
         list_long.extend(long)
@@ -682,6 +747,8 @@ def database_parse_multicoordinates(collection):
 def database_parse_multicoordinates_2018(collection):
     #parses the top x number of rows
     x = 1
+
+    #list of multiline strings and volumes, sorted by largest volume to smallest
     results = list(collection.find({},{"multilinestring": 1, "VOLUME": 1, "_id": 0}))
     results.sort(key = itemgetter('VOLUME'), reverse = True)
 
@@ -689,6 +756,7 @@ def database_parse_multicoordinates_2018(collection):
     list_lat = []
     list_volume_extended = []
 
+    #for every row, use the parse_multicoordinates function
     for result in results[:x]:
         long,lat,vol = parse_multicoordinates(result["multilinestring"],result["VOLUME"])
         list_long.extend(long)
