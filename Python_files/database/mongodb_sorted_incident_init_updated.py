@@ -36,8 +36,10 @@ def insert_collection_freq_by_year(file_name, year):
     except:
         print("Problem in inserting: ",file_name)
 
+#connects to cluster and database
 cluster = MongoClient(mongodb_userinfo.connection_string())
 db = cluster["592_Project_Presentation"]
 
+#inserts the traffic incidents by year into the database
 for year in range(2016, 2019):
     insert_collection_freq_by_year("Traffic_Incidents.csv", year)

@@ -30,14 +30,15 @@ def insert_collection(file_name):
     except:
         print("Problem in inserting: ",file_name)
     
-
+#connects to cluster and database
 cluster = MongoClient(mongodb_userinfo.connection_string())
 db = cluster["592_Project_Presentation"]
 
 #make sure you are in the csv directory file
 files = os.listdir()
 
-# for file in files:
-#     insert_collection(file)
+#inserts all files in the directory to the database
+for file in files:
+    insert_collection(file)
 
 

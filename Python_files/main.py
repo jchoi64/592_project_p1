@@ -1,3 +1,4 @@
+#import required libraries
 import tkinter as tk
 from tkinter import ttk
 from functionality import (

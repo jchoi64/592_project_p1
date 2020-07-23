@@ -1,3 +1,4 @@
+#import required libraries
 import pymongo
 from pymongo import MongoClient
 
