@@ -1,0 +1,10 @@
+#ignore pycache
+Python_files/__pycache__
+Python_files/database/__pycache__
+
+#ignore connection string
+Python_files/database/mongodb_userinfo.py
+Python_files/mongodb_userinfo.py
+
+#ignore created HTML files, for now
+HTML_files
